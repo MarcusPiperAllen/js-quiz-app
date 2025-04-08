@@ -1,66 +1,74 @@
+// Basic interactive JS quiz app with reset button and visual building blocks
+
 const quizData = [
   {
-    question: "What does NaN stand for in JavaScript?",
-    options: ["Not a Number", "New and Null", "Number and Name", "No Assigned Name"],
-    answer: "Not a Number"
+    question: "What is the output of: console.log(typeof null)?",
+    options: ["object", "null", "undefined", "boolean"],
+    answer: "object"
   },
   {
-    question: "Which method checks if a value is NaN?",
-    options: ["isNaN()", "checkNaN()", "isNumber()", "validateNaN()"],
-    answer: "isNaN()"
+    question: "Which method removes the last item of an array?",
+    options: ["pop()", "push()", "shift()", "slice()"],
+    answer: "pop()"
+  },
+  {
+    question: "What is the purpose of the '===' operator in JS?",
+    options: ["Assign a value", "Loose equality", "Strict equality", "Compare length"],
+    answer: "Strict equality"
   }
 ];
 
-let currentQuestion = 0;
+let currentIndex = 0;
 let score = 0;
 
 const questionEl = document.getElementById("question");
-const answersEl = document.getElementById("answers");
-const nextBtn = document.getElementById("next-btn");
-const resultEl = document.getElementById("result");
+const optionsEl = document.getElementById("options");
+const scoreEl = document.getElementById("score");
+const resetBtn = document.getElementById("resetBtn");
+const progressEl = document.getElementById("progress");
 
-function loadQuestion() {
-  resultEl.textContent = "";
-  const current = quizData[currentQuestion];
+function renderQuestion() {
+  if (currentIndex >= quizData.length) {
+    questionEl.textContent = "Quiz Complete!";
+    optionsEl.innerHTML = "";
+    progressEl.innerHTML = "🎉 All puzzle pieces are in place!";
+    return;
+  }
+
+  const current = quizData[currentIndex];
   questionEl.textContent = current.question;
-  answersEl.innerHTML = "";
+  optionsEl.innerHTML = "";
 
-  current.options.forEach(option => {
+  current.options.forEach(opt => {
     const btn = document.createElement("button");
-    btn.textContent = option;
-    btn.addEventListener("click", () => checkAnswer(option));
-    answersEl.appendChild(btn);
+    btn.textContent = opt;
+    btn.className = "option-btn";
+    btn.onclick = () => selectAnswer(opt);
+    optionsEl.appendChild(btn);
   });
 }
 
-function checkAnswer(selected) {
-  const correct = quizData[currentQuestion].answer;
+function selectAnswer(selected) {
+  const correct = quizData[currentIndex].answer;
   if (selected === correct) {
-    resultEl.textContent = "✅ Correct!";
     score++;
-  } else {
-    resultEl.textContent = `❌ Wrong! Correct: ${correct}`;
+    scoreEl.textContent = `Score: ${score}`;
+    const piece = document.createElement("div");
+    piece.className = "puzzle-piece";
+    piece.textContent = "🧩";
+    progressEl.appendChild(piece);
   }
-  nextBtn.style.display = "inline-block";
+  currentIndex++;
+  renderQuestion();
 }
 
-nextBtn.addEventListener("click", () => {
-  currentQuestion++;
-  if (currentQuestion < quizData.length) {
-    loadQuestion();
-    nextBtn.style.display = "none";
-  } else {
-    showFinalScore();
-  }
-});
-
-function showFinalScore() {
-  questionEl.textContent = "Quiz Complete!";
-  answersEl.innerHTML = "";
-  nextBtn.style.display = "none";
-  resultEl.textContent = `You scored ${score} out of ${quizData.length}`;
+function resetQuiz() {
+  currentIndex = 0;
+  score = 0;
+  scoreEl.textContent = "Score: 0";
+  progressEl.innerHTML = "";
+  renderQuestion();
 }
 
-// Initialize the first question
-loadQuestion();
-nextBtn.style.display = "none";
+resetBtn.addEventListener("click", resetQuiz);
+renderQuestion();
