@@ -3,16 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JS Quiz App</title>
+  <title>JS Puzzle Quiz</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="question"></div>
-<div id="options"></div>
-<p id="score">Score: 0</p>
-<div id="progress"></div>
-<button id="resetBtn">Reset Quiz</button>
+  <header id="quizHeader">
+    <h1>🧩 JavaScript Puzzle Quiz</h1>
+    <p>Answer questions correctly to complete the puzzle and unlock a celebration!</p>
+  </header>
+
+  <div id="app-container">
+    <div id="question"></div>
+    <div id="options"></div>
+    <p id="score">Score: 0</p>
+
+    <div id="puzzleBoard">
+      <div class="puzzle-piece-slot" id="piece1">🧩</div>
+      <div class="puzzle-piece-slot" id="piece2">🧩</div>
+      <div class="puzzle-piece-slot" id="piece3">🧩</div>
+      <div class="puzzle-piece-slot" id="piece4">🧩</div>
+    </div>
+
+    <div id="resultMessage"></div>
+    <button id="resetBtn">Reset Quiz</button>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+

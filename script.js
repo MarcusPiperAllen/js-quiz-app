@@ -15,6 +15,11 @@ const quizData = [
     question: "What is the purpose of the '===' operator in JS?",
     options: ["Assign a value", "Loose equality", "Strict equality", "Compare length"],
     answer: "Strict equality"
+  },
+  {
+    question: "Which method is used to remove the first element from an array?",
+    options: ["shift()", "pop()", "splice()", "slice()"],
+    answer: "shift()"
   }
 ];
 
@@ -25,13 +30,21 @@ const questionEl = document.getElementById("question");
 const optionsEl = document.getElementById("options");
 const scoreEl = document.getElementById("score");
 const resetBtn = document.getElementById("resetBtn");
-const progressEl = document.getElementById("progress");
+const progressEl = document.getElementById("puzzleBoard");
+const resultEl = document.getElementById("resultMessage");
 
 function renderQuestion() {
+  resultEl.textContent = "";
   if (currentIndex >= quizData.length) {
-    questionEl.textContent = "Quiz Complete!";
+    if (score === quizData.length) {
+      resultEl.textContent = "🎉 You completed the quiz!";
+      resultEl.style.color = "green";
+      triggerConfetti();
+    } else {
+      resultEl.textContent = "❌ You did not pass. Please try again.";
+      resultEl.style.color = "#f44336";
+    }
     optionsEl.innerHTML = "";
-    progressEl.innerHTML = "🎉 All puzzle pieces are in place!";
     return;
   }
 
@@ -53,10 +66,8 @@ function selectAnswer(selected) {
   if (selected === correct) {
     score++;
     scoreEl.textContent = `Score: ${score}`;
-    const piece = document.createElement("div");
-    piece.className = "puzzle-piece";
-    piece.textContent = "🧩";
-    progressEl.appendChild(piece);
+    const currentPiece = document.getElementById(`piece${score}`);
+    if (currentPiece) currentPiece.style.color = "black";
   }
   currentIndex++;
   renderQuestion();
@@ -66,8 +77,17 @@ function resetQuiz() {
   currentIndex = 0;
   score = 0;
   scoreEl.textContent = "Score: 0";
-  progressEl.innerHTML = "";
+  resultEl.textContent = "";
+  for (let i = 1; i <= quizData.length; i++) {
+    const piece = document.getElementById(`piece${i}`);
+    if (piece) piece.style.color = "transparent";
+  }
   renderQuestion();
+}
+
+function triggerConfetti() {
+  // Placeholder for future confetti effect (e.g., canvas-confetti library)
+  console.log("🎊 Confetti would launch here!");
 }
 
 resetBtn.addEventListener("click", resetQuiz);
